@@ -4,28 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class Createcadastrocep extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        Schema::create('CEP', function (Blueprint $table) {
+        Schema::create('ceps', function (Blueprint $table) {
             $table->id();
-            $table->integer('CEP')->nullable();
-            $table->string('Logradouro')->nullable();
-            $table->string('Bairro')->nullable();
-            $table->string('Cidade')->nullable();
-            $table->string('Estado')->nullable();
+            $table->string('cep')->nullable();
+            $table->string('logradouro')->nullable();
+            $table->string('bairro')->nullable();
+            $table->string('cidade')->nullable();
+            $table->string('estado')->nullable();
+            $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('CEP');
+        Schema::dropIfExists('ceps');
     }
-};
+}
+

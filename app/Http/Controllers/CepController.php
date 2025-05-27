@@ -3,30 +3,48 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use App\Models\Cep;
 
 class CepController extends Controller
 {
+    public function buscar(Request $request)
+    {
+        $request->validate(['cep' => 'required']);
+
+        $response = Http::get("https://viacep.com.br/ws/{$request->cep}/json/");
+        $data = $response->json();
+
+        if (isset($data['erro']) && $data['erro']) {
+            return redirect()->back()->with('error', 'CEP inválido!');
+        }
+
+        return view('ceps.confirmar', ['dados' => $data]);
+    }
+
     public function store(Request $request)
-{
-    $request->validate(['cep' => 'required']);
+    {
+        Cep::create([
+            'cep' => $request->cep,
+            'logradouro' => $request->logradouro,
+            'bairro' => $request->bairro,
+            'cidade' => $request->cidade,
+            'estado' => $request->estado,
+        ]);
 
-    $response = Http::get("https://viacep.com.br/ws/{$request->cep}/json/");
-    $data = $response->json();
+        return redirect()->route('ceps.index')->with('success', 'CEP cadastrado com sucesso!');
+    }
 
-    $cep = Cep::create([
-        'cep' => $data['cep'],
-        'logradouro' => $data['logradouro'],
-        'bairro' => $data['bairro'],
-        'cidade' => $data['localidade'],
-        'estado' => $data['uf'],
-    ]);
+    public function index()
+    {
+        $ceps = Cep::all();
+        return view('ceps.index', compact('ceps'));
+    }
 
-    return redirect()->back()->with('success', 'CEP cadastrado!');
-}
-
-public function index()
+    public function listar()
 {
     $ceps = Cep::all();
-    return view('ceps.index', compact('ceps'));
+    return view('ceps.listar', compact('ceps'));
 }
+
 }

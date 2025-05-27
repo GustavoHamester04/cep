@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Cep extends Model
 {
-    protected $table = 'CEP';
+    use HasFactory;
 
     protected $fillable = [
-        'CEP',
-        'Logradouro',
-        'Bairro',
-        'Cidade',
-        'Estado',
+        'cep',
+        'logradouro',
+        'bairro',
+        'cidade',
+        'estado',
     ];
-
-    public $timestamps = false;
 }
+
