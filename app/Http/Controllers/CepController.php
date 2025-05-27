@@ -24,6 +24,14 @@ class CepController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'cep' => 'required',
+            'logradouro' => 'nullable',
+            'bairro' => 'nullable',
+            'cidade' => 'required',
+            'estado' => 'required',
+        ]);
+
         Cep::create([
             'cep' => $request->cep,
             'logradouro' => $request->logradouro,
@@ -34,6 +42,7 @@ class CepController extends Controller
 
         return redirect()->route('ceps.index')->with('success', 'CEP cadastrado com sucesso!');
     }
+
 
     public function index()
     {
